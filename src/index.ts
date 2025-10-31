@@ -5,6 +5,7 @@ import { jwt_key } from "./config.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import { userMiddleware } from "./middleware.js";
 dotenv.config();
 
 
@@ -54,16 +55,18 @@ app.post("/api/v1/signin", async (req, res) => {
   }
 });
 
-app.post("/api/v1/content",async (req,res)=>{
-    const{title,link,tags,userId} = req.body;
+app.post("/api/v1/content",userMiddleware,async (req,res)=>{
+    const{title,link} = req.body;
+    
     try {
         await ContentModel.create({
             title:title,
             link:link,
-            tags:tags,
-            userId:userId
+            //@ts-ignore
+            userId:req.userId,
+            tags:[]
         })
-        res.json({
+        return res.json({
             message:"sucessfully content addeed"
         });
     } catch (error) {
