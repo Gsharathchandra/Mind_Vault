@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 import dotenv from "dotenv"
 import { Schema,model } from "mongoose";
 dotenv.config();
-
+//hello
 
 const MONGO_URL = process.env.MONGO_URL as string;
 
