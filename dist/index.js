@@ -56,7 +56,7 @@ app.post("/api/v1/content", userMiddleware, async (req, res) => {
             userId: req.userId,
             tags: []
         });
-        res.json({
+        return res.json({
             message: "sucessfully content addeed"
         });
     }

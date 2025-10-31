@@ -5,7 +5,7 @@ export const userMiddleware = (req, res, next) => {
     const decoded = jwt.verify(header, jwt_key);
     if (decoded) {
         //@ts-ignore
-        req.userId = decode.id;
+        req.userId = decoded.id;
         next();
     }
     else {
