@@ -1,11 +1,12 @@
 import express from "express";
-import { connectDB } from "./db.js";
+import { connectDB, ContentModel } from "./db.js";
 import { UserModel } from "./db.js";
+import { jwt_key } from "./config.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 dotenv.config();
-const jwt_key = "hai";
+
 
 
 const app = express();
@@ -52,5 +53,24 @@ app.post("/api/v1/signin", async (req, res) => {
      res.status(500).json({ message: "Server error 🔥" });
   }
 });
+
+app.post("/api/v1/content",async (req,res)=>{
+    const{title,link,tags,userId} = req.body;
+    try {
+        await ContentModel.create({
+            title:title,
+            link:link,
+            tags:tags,
+            userId:userId
+        })
+        res.json({
+            message:"sucessfully content addeed"
+        });
+    } catch (error) {
+        res.json({
+            message:"some error has occured"
+        })
+    }
+})
 
 app.listen(3000);
