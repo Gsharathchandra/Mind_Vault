@@ -21,7 +21,7 @@ app.post("/api/v1/signup", async (req, res) => {
     }
     catch (error) {
         res.status(411).json({
-            message: "some error has occured"
+            message: "some error has occured",
         });
     }
 });
@@ -30,7 +30,8 @@ app.post("/api/v1/signin", async (req, res) => {
     const password = req.body.password;
     try {
         const currentuser = await UserModel.findOne({
-            username, password
+            username,
+            password,
         });
         if (!currentuser) {
             return res.status(401).json({ message: "Invalid credentials ❌" });
@@ -38,7 +39,7 @@ app.post("/api/v1/signin", async (req, res) => {
         if (currentuser) {
             const token = jwt.sign({ id: currentuser._id }, jwt_key);
             res.json({
-                token
+                token,
             });
         }
     }
@@ -54,15 +55,32 @@ app.post("/api/v1/content", userMiddleware, async (req, res) => {
             link: link,
             //@ts-ignore
             userId: req.userId,
-            tags: []
+            tags: [],
         });
         return res.json({
-            message: "sucessfully content addeed"
+            message: "sucessfully content addeed",
         });
     }
     catch (error) {
         res.json({
-            message: "some error has occured"
+            message: "some error has occured",
+        });
+    }
+});
+app.get("/api/v1/content", userMiddleware, async (req, res) => {
+    //@ts-ignore
+    const userId = req.userId;
+    const content = await ContentModel.find({
+        userId: userId,
+    }).populate("userId", "username userId");
+    if (content) {
+        res.json({
+            content,
+        });
+    }
+    else {
+        res.json({
+            message: "no content to display",
         });
     }
 });
